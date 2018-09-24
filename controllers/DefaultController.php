@@ -15,7 +15,6 @@ use yii\filters\AjaxFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use function is_null;
-use function var_dump;
 
 class DefaultController extends Controller
 {
@@ -61,6 +60,7 @@ class DefaultController extends Controller
         $config = $this->getConfig();
         /* @var $model Lead */
         $model = Yii::createObject($config['className']);
+        $model->key = Yii::$app->request->get('key');
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $result = [
                 'status' => true,

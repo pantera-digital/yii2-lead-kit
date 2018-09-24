@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             'id',
+            'key',
             'ip',
             'user_agent:ntext',
             'created_at:datetime',

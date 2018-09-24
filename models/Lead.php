@@ -17,6 +17,7 @@ use function nl2br;
  * @property string $created_at
  * @property string $data
  * @property integer $is_viewed
+ * @property string $key
  */
 class Lead extends \yii\db\ActiveRecord
 {
@@ -83,6 +84,7 @@ class Lead extends \yii\db\ActiveRecord
         return [
             [['is_viewed'], 'in', 'range' => [0, 1]],
             [['user_agent', 'data'], 'string'],
+            [['key'], 'string', 'max' => 255],
             [['created_at'], 'safe'],
             [['ip'], 'string', 'max' => 45],
         ];

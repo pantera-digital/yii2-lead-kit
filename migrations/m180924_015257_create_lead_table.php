@@ -19,6 +19,7 @@ class m180924_015257_create_lead_table extends Migration
             'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
             'data' => $this->text(),
             'is_viewed' => $this->boolean()->notNull()->defaultValue(0),
+            'key' => $this->string()->notNull(),
         ]);
     }
 
