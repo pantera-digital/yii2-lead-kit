@@ -1,11 +1,10 @@
 <?php
 
-namespace pantera\leads\models;
+namespace pantera\leads\admin\models;
 
-use Yii;
+use pantera\leads\models\Lead;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use pantera\leads\models\Lead;
 
 /**
  * LeadSearch represents the model behind the search form of `pantera\leads\models\Lead`.

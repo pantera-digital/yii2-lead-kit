@@ -15,6 +15,13 @@ use Yii;
  */
 class Lead extends \yii\db\ActiveRecord
 {
+    public function beforeValidate()
+    {
+        $this->ip = Yii::$app->request->getUserIP();
+        $this->user_agent = Yii::$app->request->getUserAgent();
+        return parent::beforeValidate();
+    }
+
     /**
      * {@inheritdoc}
      */

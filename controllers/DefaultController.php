@@ -1,127 +1,88 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: singletonn
+ * Date: 9/24/18
+ * Time: 12:15 PM
+ */
 
 namespace pantera\leads\controllers;
 
-use Yii;
 use pantera\leads\models\Lead;
-use pantera\leads\models\LeadSearch;
+use pantera\leads\Module;
+use Yii;
+use yii\filters\AjaxFilter;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use function is_null;
 
-/**
- * DefaultController implements the CRUD actions for Lead model.
- */
 class DefaultController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+    /* @var Module */
+    public $module;
+
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
+            [
+                'class' => AjaxFilter::class,
+                'only' => ['modal', 'save'],
             ],
         ];
     }
 
     /**
-     * Lists all Lead models.
-     * @return mixed
+     * Рендеринг модалки с формой
+     * @return string
+     * @throws BadRequestHttpException
+     * @throws \yii\base\InvalidConfigException
      */
-    public function actionIndex()
+    public function actionModal()
     {
-        $searchModel = new LeadSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Lead model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Lead model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Lead();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
+        $config = $this->getConfig();
+        /* @var $model Lead */
+        $model = Yii::createObject($config['className']);
+        $this->layout = 'modal';
+        return $this->render($config['view'], [
             'model' => $model,
+            'key' => Yii::$app->request->get('key'),
         ]);
     }
 
     /**
-     * Updates an existing Lead model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * Сохранение данных с формы
+     * @return \yii\web\Response
+     * @throws BadRequestHttpException
+     * @throws \yii\base\InvalidConfigException
      */
-    public function actionUpdate($id)
+    public function actionSave()
     {
-        $model = $this->findModel($id);
-
+        $config = $this->getConfig();
+        /* @var $model Lead */
+        $model = Yii::createObject($config['className']);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $result = [
+                'status' => true,
+                'swal' => [
+                    'title' => $config['swal-title'],
+                    'html' => $config['swal-html'],
+                    'btn' => $config['swal-btn'],
+                ],
+            ];
+        } else {
+            $result = [
+                'status' => false,
+            ];
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        return $this->asJson($result);
     }
 
-    /**
-     * Deletes an existing Lead model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
+    protected function getConfig(): array
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Lead model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Lead the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Lead::findOne($id)) !== null) {
-            return $model;
+        $key = Yii::$app->request->get('key');
+        if (is_null($key)) {
+            throw new BadRequestHttpException('Отсутствует параметр {key}');
         }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
+        return $this->module->getConfig($key);
     }
 }

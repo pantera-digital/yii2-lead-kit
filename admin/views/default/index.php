@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
-/* @var $searchModel pantera\leads\models\LeadSearch */
+/* @var $searchModel \pantera\leads\admin\models\LeadSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Leads';
