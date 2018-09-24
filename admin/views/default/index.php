@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'ip',
             'user_agent:ntext',
-            'created_at',
+            'created_at:datetime',
             'data:ntext',
             [
                 'class' => 'yii\grid\ActionColumn',

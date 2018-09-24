@@ -5,6 +5,7 @@ namespace pantera\leads\admin\models;
 use pantera\leads\models\Lead;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use const SORT_DESC;
 
 /**
  * LeadSearch represents the model behind the search form of `pantera\leads\models\Lead`.
@@ -46,6 +47,9 @@ class LeadSearch extends Lead
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => ['id' => SORT_DESC],
+            ],
         ]);
 
         $this->load($params);

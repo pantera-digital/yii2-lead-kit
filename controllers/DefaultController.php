@@ -15,6 +15,7 @@ use yii\filters\AjaxFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use function is_null;
+use function var_dump;
 
 class DefaultController extends Controller
 {
