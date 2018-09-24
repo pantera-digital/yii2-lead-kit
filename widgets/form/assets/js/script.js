@@ -48,7 +48,8 @@ $(document).on('submit', '.lead-form', function () {
             });
             if (modal === undefined || modal.hasClass('lead-modal--ajax') === false) {
                 self.get(0).reset();
-            } else {
+            }
+            if (modal) {
                 modal.modal('hide');
             }
         }
