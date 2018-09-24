@@ -5,6 +5,7 @@ namespace pantera\leads\admin\controllers;
 use pantera\leads\admin\models\LeadSearch;
 use pantera\leads\admin\Module;
 use pantera\leads\models\Lead;
+use pheme\grid\actions\ToggleAction;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -38,8 +39,20 @@ class DefaultController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'toggle' => ['POST'],
                 ],
             ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'toggle' => [
+                'class' => ToggleAction::className(),
+                'modelClass' => Lead::class,
+                'attribute' => 'is_viewed',
+            ]
         ];
     }
 
@@ -55,19 +68,6 @@ class DefaultController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Lead model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
         ]);
     }
 

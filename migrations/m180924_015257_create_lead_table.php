@@ -14,10 +14,11 @@ class m180924_015257_create_lead_table extends Migration
     {
         $this->createTable('{{%lead}}', [
             'id' => $this->primaryKey(),
-            'ip' => $this->string(45)->notNull(),
-            'user_agent' => $this->text()->notNull(),
+            'ip' => $this->string(45)->null(),
+            'user_agent' => $this->text()->null(),
             'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
             'data' => $this->text(),
+            'is_viewed' => $this->boolean()->notNull()->defaultValue(0),
         ]);
     }
 

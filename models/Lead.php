@@ -3,6 +3,7 @@
 namespace pantera\leads\models;
 
 use Yii;
+use function get_called_class;
 use function get_class_vars;
 use function implode;
 use function nl2br;
@@ -15,6 +16,7 @@ use function nl2br;
  * @property string $user_agent
  * @property string $created_at
  * @property string $data
+ * @property integer $is_viewed
  */
 class Lead extends \yii\db\ActiveRecord
 {
@@ -55,12 +57,14 @@ class Lead extends \yii\db\ActiveRecord
         return $properties;
     }
 
-    public function beforeValidate()
+    public function beforeSave($insert)
     {
-        $this->ip = Yii::$app->request->getUserIP();
-        $this->user_agent = Yii::$app->request->getUserAgent();
-        $this->data = $this->toText();
-        return parent::beforeValidate();
+        if ($insert) {
+            $this->ip = Yii::$app->request->getUserIP();
+            $this->user_agent = Yii::$app->request->getUserAgent();
+            $this->data = $this->toText();
+        }
+        return parent::beforeSave($insert);
     }
 
     /**
@@ -77,7 +81,7 @@ class Lead extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ip', 'user_agent'], 'required'],
+            [['is_viewed'], 'in', 'range' => [0, 1]],
             [['user_agent', 'data'], 'string'],
             [['created_at'], 'safe'],
             [['ip'], 'string', 'max' => 45],
@@ -96,5 +100,10 @@ class Lead extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'data' => 'Data',
         ];
+    }
+
+    public static function find()
+    {
+        return new LeadQuery(get_called_class());
     }
 }
