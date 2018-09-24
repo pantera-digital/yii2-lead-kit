@@ -19,6 +19,9 @@ $this->title = 'Заказать вопрос';
 $form = ActiveForm::begin([
     'id' => 'lead-question-form',
     'action' => ['/leads/default/save', 'key' => $key],
+    'options' => [
+        'class' => 'lead-form',
+    ],
 ]);
 
 echo $form->field($model, 'name')->textInput([

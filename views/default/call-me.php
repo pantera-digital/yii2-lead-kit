@@ -19,6 +19,9 @@ $this->title = 'Заказать обратный звонок';
 $form = ActiveForm::begin([
     'id' => 'lead-call-me-form',
     'action' => ['/leads/default/save', 'key' => $key],
+    'options' => [
+        'class' => 'lead-form',
+    ],
 ]);
 
 echo $form->field($model, 'name')->textInput([

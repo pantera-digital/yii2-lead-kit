@@ -31,7 +31,7 @@ $(document).on('loaded.bs.modal', '.lead-modal', function () {
 /**
  * Ajax отправка формы
  */
-$(document).on('submit', '.lead-modal form', function () {
+$(document).on('submit', '.lead-form', function () {
     const self = $(this);
     const btn = self.find('.ladda-button');
     const modal = self.parents('.lead-modal');
@@ -46,10 +46,11 @@ $(document).on('submit', '.lead-modal form', function () {
                 confirmButtonText: result.swal.btn,
                 type: "success"
             });
-            if (modal.hasClass('lead-modal--ajax') === false) {
+            if (modal === undefined || modal.hasClass('lead-modal--ajax') === false) {
                 self.get(0).reset();
+            } else {
+                modal.modal('hide');
             }
-            modal.modal('hide');
         }
     });
     return false;

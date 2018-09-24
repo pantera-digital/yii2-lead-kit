@@ -29,9 +29,16 @@ class LeadForm extends Widget
     /* @var array Массив параметров ссылки */
     public $options = [];
     /* @var bool Флаг что нужно загрузить форму асинхронно */
-    public $ajaxMode = true;
+    public $mode = self::MODE_AJAX;
     /* @var array Конфиг формы */
     private $_config;
+
+    /* @var string Форма будет загруженна асинхронно */
+    const MODE_AJAX = 'ajax';
+    /* @var string Форма с модалкой рендерится сразу */
+    const MODE_DEFAULT = 'default';
+    /* @var string Инлайн форма */
+    const MODE_INLINE = 'inline';
 
     public function run()
     {
@@ -39,10 +46,16 @@ class LeadForm extends Widget
         $text = Html::tag('span', $this->text, [
             'class' => 'ladda-label',
         ]);
-        if ($this->ajaxMode) {
+        if ($this->mode === self::MODE_AJAX) {
             return Html::a($text, ['/leads/default/modal', 'key' => $this->key], $this->options);
-        } else {
+        } elseif ($this->mode === self::MODE_DEFAULT) {
             return Html::button($text, $this->options);
+        } else {
+            $model = Yii::createObject($this->_config['className']);
+            return $this->render($this->_config['view'], [
+                'key' => $this->key,
+                'model' => $model,
+            ]);
         }
     }
 
@@ -65,32 +78,34 @@ class LeadForm extends Widget
                 'style' => 'zoom-in',
             ],
         ]);
-        Event::on(View::class, View::EVENT_END_BODY, function (Event $e) use ($id) {
-            $content = '';
-            $options = [
-                'id' => $id,
-                'class' => 'modal modal-default lead-modal',
-            ];
-            if ($this->ajaxMode === false) {
-                $model = Yii::createObject($this->_config['className']);
-                $content = $this->render($this->_config['view'], [
-                    'key' => $this->key,
-                    'model' => $model,
+        if ($this->mode !== self::MODE_INLINE) {
+            Event::on(View::class, View::EVENT_END_BODY, function () use ($id) {
+                $content = '';
+                $options = [
+                    'id' => $id,
+                    'class' => 'modal modal-default lead-modal',
+                ];
+                if ($this->mode === self::MODE_DEFAULT) {
+                    $model = Yii::createObject($this->_config['className']);
+                    $content = $this->render($this->_config['view'], [
+                        'key' => $this->key,
+                        'model' => $model,
+                    ]);
+                    $content = $this->render('@pantera/leads/views/layouts/modal', [
+                        'content' => $content,
+                    ]);
+                } else {
+                    Html::addCssClass($options, 'lead-modal--ajax');
+                }
+                $modalContent = Html::tag('div', $content, [
+                    'class' => 'modal-content',
                 ]);
-                $content = $this->render('@pantera/leads/views/layouts/modal', [
-                    'content' => $content,
+                $modalDialog = Html::tag('div', $modalContent, [
+                    'class' => 'modal-dialog',
                 ]);
-            } else {
-                Html::addCssClass($options, 'lead-modal--ajax');
-            }
-            $modalContent = Html::tag('div', $content, [
-                'class' => 'modal-content',
-            ]);
-            $modalDialog = Html::tag('div', $modalContent, [
-                'class' => 'modal-dialog',
-            ]);
-            echo Html::tag('div', $modalDialog, $options);
-        });
+                echo Html::tag('div', $modalDialog, $options);
+            });
+        }
         LeadFormAsset::register($this->view);
     }
 }
