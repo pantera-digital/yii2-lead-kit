@@ -1,13 +1,16 @@
-$('#modal-lead').on('hidden.bs.modal', function (e) {
-    $(e.target).removeData('bs.modal');
-    $(this).find('.modal-content').html('');
+$('.lead-modal').on('hidden.bs.modal', function (e) {
+    const self = $(this);
+    if (self.hasClass('lead-modal--ajax')) {
+        $(e.target).removeData('bs.modal');
+        $(this).find('.modal-content').html('');
+    }
 });
 
 /**
  * Клик по кнопке открытия модалки с формой
  * показываем лоад в кнопке
  */
-$(document).on('click', '[data-target="#modal-lead"]', function () {
+$(document).on('click', 'a.open-lead-modal', function () {
     const self = $(this);
     if (self.attr('disabled')) {
         return false;
@@ -20,17 +23,18 @@ $(document).on('click', '[data-target="#modal-lead"]', function () {
  * Когда данные в модалку загрузяться
  * убераем лоадер с кноки
  */
-$(document).on('loaded.bs.modal', '#modal-lead', function () {
-    const btn = $('[data-target="#modal-lead"][data-loading]');
+$(document).on('loaded.bs.modal', '.lead-modal', function () {
+    const btn = $('.open-lead-modal[data-loading]');
     btn.ladda('remove');
 });
 
 /**
  * Ajax отправка формы
  */
-$(document).on('submit', '#modal-lead form', function () {
+$(document).on('submit', '.lead-modal form', function () {
     const self = $(this);
     const btn = self.find('.ladda-button');
+    const modal = self.parents('.lead-modal');
     btn.ladda();
     btn.ladda('start');
     $.post(self.attr('action'), self.serialize()).always(function (result) {
@@ -42,7 +46,10 @@ $(document).on('submit', '#modal-lead form', function () {
                 confirmButtonText: result.swal.btn,
                 type: "success"
             });
-            $('#modal-lead').modal('hide');
+            if (modal.hasClass('lead-modal--ajax') === false) {
+                self.get(0).reset();
+            }
+            modal.modal('hide');
         }
     });
     return false;
