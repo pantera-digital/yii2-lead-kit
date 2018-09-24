@@ -40,9 +40,16 @@ class DefaultController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                     'toggle' => ['POST'],
+                    'delete-group' => ['POST'],
                 ],
             ],
         ];
+    }
+
+    public function actionDeleteGroup()
+    {
+        Lead::deleteAll(['IN', Lead::tableName() . '.id', Yii::$app->request->post('ids')]);
+        return $this->redirect(['index']);
     }
 
     public function actions()

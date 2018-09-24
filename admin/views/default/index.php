@@ -16,11 +16,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php Pjax::begin(); ?>
-
+    <p>
+        <?= Html::a('Удалить выбранное', ['delete-group'], [
+            'class' => 'btn btn-danger leads-group-delete',
+        ]) ?>
+    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+            [
+                'class' => 'yii\grid\CheckboxColumn',
+                'cssClass' => 'selection',
+                'options' => [
+                    'style' => 'width: 20px !important;'
+                ],
+                'contentOptions' => [
+                    'style' => 'width: 20px !important;'
+                ],
+            ],
             'id',
             'key',
             'ip',

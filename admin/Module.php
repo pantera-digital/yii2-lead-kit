@@ -9,6 +9,7 @@
 namespace pantera\leads\admin;
 
 use pantera\leads\models\Lead;
+use Yii;
 use function is_null;
 
 class Module extends \yii\base\Module
@@ -17,6 +18,12 @@ class Module extends \yii\base\Module
     public $permissions = ['@'];
     /* @var int|null Количество не прочитанных заявок */
     private $_countNotViewed;
+
+    public function init()
+    {
+        parent::init();
+        ModuleAsset::register(Yii::$app->view);
+    }
 
     public function getMenuItems()
     {
