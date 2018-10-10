@@ -18,20 +18,21 @@ use function class_exists;
 
 class Module extends \yii\base\Module
 {
-    public $config = [
-        'callMe' => [
-            'className' => CallMe::class,
-            'view' => '@pantera/leads/views/default/call-me',
-        ],
-        'question' => [
-            'className' => Question::class,
-            'view' => '@pantera/leads/views/default/question',
-        ],
-    ];
+    public $config;
 
     public function init()
     {
         parent::init();
+        $this->config = ArrayHelper::merge($this->config, [
+            'callMe' => [
+                'className' => CallMe::class,
+                'view' => '@pantera/leads/views/default/call-me',
+            ],
+            'question' => [
+                'className' => Question::class,
+                'view' => '@pantera/leads/views/default/question',
+            ],
+        ]);
         array_walk($this->config, function (&$item) {
             $item['swal-title'] = ArrayHelper::getValue($item, 'swal-title', 'Мы Вам перезвоним');
             $item['swal-html'] = ArrayHelper::getValue($item, 'swal-html', 'Благодарим! Наш менеджер свяжется с Вами в самое ближайшее время');
