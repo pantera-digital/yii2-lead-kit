@@ -1,4 +1,4 @@
-;(function ($) {
+(function($){
     $('.lead-modal').on('hidden.bs.modal', function (e) {
         const self = $(this);
         if (self.hasClass('lead-modal--ajax')) {
@@ -27,13 +27,12 @@
     $(document).on('loaded.bs.modal', '.lead-modal', function () {
         const btn = $('.open-lead-modal[data-loading]');
         btn.ladda('remove');
-        $('.lead-form').submit(submit);
     });
 
     /**
      * Ajax отправка формы
      */
-    const submit = function () {
+    $(document).on('submit', '.lead-form', function () {
         const self = $(this);
         const btn = self.find('.ladda-button');
         const modal = self.parents('.lead-modal');
@@ -57,5 +56,5 @@
             }
         });
         return false;
-    };
+    });
 }(jQuery));
