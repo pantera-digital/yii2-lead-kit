@@ -18,6 +18,7 @@ use function nl2br;
  * @property string $data
  * @property integer $is_viewed
  * @property string $key
+ * @property string $referrer
  */
 class Lead extends \yii\db\ActiveRecord
 {
@@ -64,6 +65,7 @@ class Lead extends \yii\db\ActiveRecord
             $this->ip = Yii::$app->request->getUserIP();
             $this->user_agent = Yii::$app->request->getUserAgent();
             $this->data = $this->toText();
+            $this->referrer = Yii::$app->request->referrer;
         }
         return parent::beforeSave($insert);
     }
@@ -84,7 +86,7 @@ class Lead extends \yii\db\ActiveRecord
         return [
             [['is_viewed'], 'in', 'range' => [0, 1]],
             [['user_agent', 'data'], 'string'],
-            [['key'], 'string', 'max' => 255],
+            [['key', 'referrer'], 'string', 'max' => 255],
             [['created_at'], 'safe'],
             [['ip'], 'string', 'max' => 45],
         ];

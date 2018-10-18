@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'key',
             'ip',
             'user_agent:ntext',
+            'referrer',
             'created_at:datetime',
             'data:ntext',
             [
