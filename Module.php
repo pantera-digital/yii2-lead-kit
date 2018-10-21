@@ -23,7 +23,7 @@ class Module extends \yii\base\Module
     public function init()
     {
         parent::init();
-        $this->config = ArrayHelper::merge($this->config, [
+        $this->config = ArrayHelper::merge([
             'callMe' => [
                 'className' => CallMe::class,
                 'view' => '@pantera/leads/views/default/call-me',
@@ -32,7 +32,7 @@ class Module extends \yii\base\Module
                 'className' => Question::class,
                 'view' => '@pantera/leads/views/default/question',
             ],
-        ]);
+        ], $this->config);
         array_walk($this->config, function (&$item) {
             $item['swal-title'] = ArrayHelper::getValue($item, 'swal-title', 'Мы Вам перезвоним');
             $item['swal-html'] = ArrayHelper::getValue($item, 'swal-html', 'Благодарим! Наш менеджер свяжется с Вами в самое ближайшее время');
