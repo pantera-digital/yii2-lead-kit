@@ -14,7 +14,7 @@ use yii\web\View;
 /* @var $this View */
 /* @var $key string */
 /* @var $model Question */
-$this->title = 'Заказать вопрос';
+$this->title = 'Задать вопрос';
 
 $form = ActiveForm::begin([
     'id' => 'lead-question-form',
