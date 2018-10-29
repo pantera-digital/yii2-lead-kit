@@ -30,6 +30,8 @@ class LeadForm extends Widget
     public $options = [];
     /* @var bool Флаг что нужно загрузить форму асинхронно */
     public $mode = self::MODE_AJAX;
+    /* @var bool Флаг нужно ли отрендерить модалку */
+    public $isRenderModal = true;
     /* @var array Конфиг формы */
     private $_config;
 
@@ -78,7 +80,7 @@ class LeadForm extends Widget
                 'style' => 'zoom-in',
             ],
         ]);
-        if ($this->mode !== self::MODE_INLINE) {
+        if ($this->mode !== self::MODE_INLINE && $this->isRenderModal) {
             Event::on(View::class, View::EVENT_END_BODY, function () use ($id) {
                 $content = '';
                 $options = [
