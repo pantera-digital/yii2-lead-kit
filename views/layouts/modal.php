@@ -14,6 +14,7 @@ use yii\web\View;
 <?php
 if (Yii::$app->request->isAjax) {
     $this->beginPage();
+    $this->head();
     $this->beginBody();
 }
 ?>
