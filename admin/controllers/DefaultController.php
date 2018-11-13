@@ -46,6 +46,17 @@ class DefaultController extends Controller
         ];
     }
 
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
     public function actionDeleteGroup()
     {
         Lead::deleteAll(['IN', Lead::tableName() . '.id', Yii::$app->request->post('ids')]);

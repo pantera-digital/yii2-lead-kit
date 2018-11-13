@@ -38,7 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'key',
             'ip',
-            'user_agent:ntext',
+            [
+                'attribute' => 'user_agent',
+                'contentOptions' => [
+                    'style' => 'white-space: normal;',
+                ],
+            ],
             'referrer',
             'created_at:datetime',
             'data:ntext',
@@ -50,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{delete}',
+                'template' => '{update}{delete}',
             ],
         ],
     ]); ?>
