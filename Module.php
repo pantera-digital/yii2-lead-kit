@@ -18,7 +18,7 @@ use function class_exists;
 
 class Module extends \yii\base\Module
 {
-    public $config;
+    public $config = [];
 
     public function init()
     {
