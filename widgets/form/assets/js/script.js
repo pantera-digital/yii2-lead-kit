@@ -13,9 +13,6 @@
      */
     $(document).on('click', 'a.open-lead-modal', function () {
         const self = $(this);
-        if (self.attr('disabled')) {
-            return false;
-        }
         self.ladda();
         self.ladda('start');
     });
