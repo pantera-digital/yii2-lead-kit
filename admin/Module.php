@@ -28,7 +28,7 @@ class Module extends \yii\base\Module
     public function getMenuItems()
     {
         $item = [
-            'label' => 'Leads',
+            'label' => 'Заявки с форм',
             'url' => ['/leads/default/index'],
             'icon' => 'phone',
         ];
