@@ -33,9 +33,16 @@
         const self = $(this);
         const btn = self.find('.ladda-button');
         const modal = self.parents('.lead-modal');
+        const formData = new FormData(self[0]);
         btn.ladda();
         btn.ladda('start');
-        $.post(self.attr('action'), self.serialize()).always(function (result) {
+        $.ajax({
+            url : self.attr('action'),
+            type : 'POST',
+            data : formData,
+            processData: false,
+            contentType: false
+        }).always(function (result) {
             btn.ladda('remove');
             if (result.status) {
                 swal({
