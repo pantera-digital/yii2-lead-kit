@@ -33,7 +33,7 @@ class LeadForm extends Widget
     /* @var bool Флаг нужно ли отрендерить модалку */
     public $isRenderModal = true;
     /* @var array Конфиг формы */
-    private $_config;
+    protected $_config;
 
     /* @var string Форма будет загруженна асинхронно */
     const MODE_AJAX = 'ajax';
